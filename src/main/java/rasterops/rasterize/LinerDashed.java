@@ -1,4 +1,4 @@
-package rasterops;
+package rasterops.rasterize;
 
 import model.Line;
 import model.Point;

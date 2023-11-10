@@ -1,4 +1,4 @@
-package rasterops.fill;
+package rasterops.fill.test;
 
 import java.util.function.Predicate;
 

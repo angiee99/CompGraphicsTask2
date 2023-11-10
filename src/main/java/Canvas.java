@@ -1,12 +1,12 @@
 import model.Line;
 import model.Point;
 import rasterization.RasterBI;
-import rasterops.LinerDDAII;
-import rasterops.LinerDashed;
-import rasterops.LinerStrict;
-import rasterops.PolygonerBasic;
+import rasterops.rasterize.LinerDDAII;
+import rasterops.rasterize.LinerDashed;
+import rasterops.rasterize.LinerStrict;
+import rasterops.rasterize.PolygonerBasic;
 import rasterops.fill.SeedFill4;
-import rasterops.fill.TestBackground;
+import rasterops.fill.test.TestBackground;
 
 import javax.swing.*;
 import java.awt.*;

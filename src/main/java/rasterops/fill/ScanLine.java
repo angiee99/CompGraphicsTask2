@@ -4,8 +4,8 @@ import model.Line;
 import model.Point;
 import model.Polygon;
 import rasterization.Raster;
-import rasterops.LinerDDAII;
-import rasterops.PolygonerBasic;
+import rasterops.rasterize.LinerDDAII;
+import rasterops.rasterize.PolygonerBasic;
 
 import java.util.ArrayList;
 import java.util.List;
