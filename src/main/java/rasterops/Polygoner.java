@@ -1,7 +1,6 @@
 package rasterops;
 
 import model.Point;
-import rasterization.Raster;
 /**
  * Responsible for an interaction between user and raster
  * in case of rasterizing polygons

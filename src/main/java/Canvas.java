@@ -1,22 +1,21 @@
 import model.Line;
 import model.Point;
-import org.w3c.dom.css.RGBColor;
 import rasterization.RasterBI;
+import rasterops.LinerDDAII;
 import rasterops.LinerDashed;
 import rasterops.LinerStrict;
-import rasterops.LinerDDAII;
 import rasterops.PolygonerBasic;
-import rasterops.fill.ScanLine;
 import rasterops.fill.SeedFill4;
-import rasterops.fill.SeedFill8;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import rasterops.fill.TestBackground;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * trida pro kresleni na platno: zobrazeni pixelu
@@ -87,7 +86,6 @@ public class Canvas {
         panel.requestFocusInWindow();
         clear();
 
-//        img.testColorSetting(new Color(255, 0, 0).getRGB()); //this passes the test
 
         panel.addKeyListener(new KeyAdapter() {
             @Override
@@ -172,8 +170,8 @@ public class Canvas {
                 }
                 if(e.getButton() == MouseEvent.BUTTON3){
                     polygoner.drawPolygon();
-                    new SeedFill8().fill(img, e.getX(), e.getY(), new Color(255, 255, 0).getRGB(),
-                            new Color(47, 47, 47).getRGB());
+                    new SeedFill4().fill(img, e.getX(), e.getY(), new Color(255, 255, 0),
+                           new TestBackground(new Color(47, 47, 47).getRGB()));
                     present(panel.getGraphics());
                 }
             }

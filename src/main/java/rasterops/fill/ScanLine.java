@@ -4,12 +4,11 @@ import model.Line;
 import model.Point;
 import model.Polygon;
 import rasterization.Raster;
-import rasterops.Liner;
 import rasterops.LinerDDAII;
-import rasterops.Polygoner;
 import rasterops.PolygonerBasic;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScanLine {
     public void fill(Raster raster, Polygon polygon, int fillColor, int polygonColor, PolygonerBasic polygoner){
