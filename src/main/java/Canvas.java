@@ -1,6 +1,7 @@
 import model.Line;
 import model.Point;
 import rasterization.RasterBI;
+import rasterops.fill.test.TestBorder;
 import rasterops.rasterize.LinerDDAII;
 import rasterops.rasterize.LinerDashed;
 import rasterops.rasterize.LinerStrict;
@@ -16,6 +17,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * trida pro kresleni na platno: zobrazeni pixelu
@@ -38,6 +40,7 @@ public class Canvas {
     private boolean Dpressed;
     private int dashedLineStep;
     private int stepChange;
+    private Color red, green, grey, yellow;
 
     // structures
     private ArrayList<Line> lineList;
@@ -52,20 +55,14 @@ public class Canvas {
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        setupCanvas();
+
         img = new RasterBI(width, height);
         liner = new LinerDDAII();
         dashedLiner = new LinerDashed();
-        polygoner = new PolygonerBasic(img, new Color(0, 155, 20).getRGB());
+        polygoner = new PolygonerBasic(img, green.getRGB());
 
-        lineList = new ArrayList<Line>();
-        previewLine = new ArrayList<Line>();
-        previewStrictLine = new ArrayList<Line>();
-        anchorPoint = new Point(-1, -1);
 
-        withShift = false;
-        Dpressed = false;
-        dashedLineStep = 10;
-        stepChange = 0;
 
         panel = new JPanel() {
             private static final long serialVersionUID = 1L;
@@ -170,8 +167,16 @@ public class Canvas {
                 }
                 if(e.getButton() == MouseEvent.BUTTON3){
                     polygoner.drawPolygon();
-                    new SeedFill4().fill(img, e.getX(), e.getY(), new Color(255, 255, 0),
-                           new TestBackground(new Color(47, 47, 47).getRGB()));
+                    Predicate<Integer> predicate;
+                    // if with Alt (Option for Mac) -> testing the border
+                    if(e.isAltDown()){
+                        predicate = new TestBorder(green.getRGB(), yellow.getRGB());
+                    }
+                    // else testing the background color
+                    else{
+                        predicate =  new TestBackground(grey.getRGB());
+                    }
+                    new SeedFill4().fill(img, e.getX(), e.getY(), yellow, predicate);
                     present(panel.getGraphics());
                 }
             }
@@ -183,9 +188,9 @@ public class Canvas {
                     Line current;
                     if (withShift) {
                         current = new LinerStrict()
-                                .getStrictLine(anchorPoint, new Point(e.getX(), e.getY()), new Color(255, 0, 0).getRGB());
+                                .getStrictLine(anchorPoint, new Point(e.getX(), e.getY()), red.getRGB());
                     } else {
-                        current = new Line(anchorPoint, new Point(e.getX(), e.getY()), new Color(255, 0, 0).getRGB());
+                        current = new Line(anchorPoint, new Point(e.getX(), e.getY()), red.getRGB());
                     }
                     Runnable newLine = () -> { lineList.add(current); };
                     change(newLine);
@@ -195,7 +200,22 @@ public class Canvas {
         });
     }
 
+    private void setupCanvas(){
+        lineList = new ArrayList<Line>();
+        previewLine = new ArrayList<Line>();
+        previewStrictLine = new ArrayList<Line>();
+        anchorPoint = new Point(-1, -1);
 
+        withShift = false;
+        Dpressed = false;
+        dashedLineStep = 10;
+        stepChange = 0;
+
+        red = new Color(255, 0, 0);
+        green= new Color(0, 155, 20);
+        grey = new Color(47, 47, 47);
+        yellow = new Color(255, 255, 0);
+    }
     /**
      * Clears the canvas and resets all the structures saved
      */
@@ -247,7 +267,7 @@ public class Canvas {
         stepChange = 0;
 
         previewLine.clear();
-        previewLine.add(new Line(p1, p2, new Color(255, 0, 0).getRGB()));
+        previewLine.add(new Line(p1, p2, red.getRGB()));
     }
 
     /**
@@ -258,7 +278,7 @@ public class Canvas {
     private void predrawStrictLine(Point p1, Point p2) {
         previewLine.clear();
         previewStrictLine.clear();
-        previewStrictLine.add(new Line(p1, p2, new Color(255, 0, 0).getRGB()));
+        previewStrictLine.add(new Line(p1, p2, red.getRGB()));
     }
 
     /**
