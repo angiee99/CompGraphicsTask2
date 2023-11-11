@@ -87,7 +87,6 @@ public class Canvas {
         panel.requestFocusInWindow();
         clear();
 
-        test();
         panel.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -95,11 +94,12 @@ public class Canvas {
                     clearCanvas();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    //TODO edit the handling of cropping
                     Runnable cut = new Runnable() {
                         @Override
                         public void run() {
                             Polygon changed = new PolygonCutter().cut(rectangles.get(0), polygoner.getPolygon());
-//                            polygoner.drawPolygon(changed, yellow.getRGB());
+//                            polygoner.drawPolygon(changed, yellow.getRGB()); -> array of polygons just
                             polygoner.setPolygon(changed);
                         };
                     };

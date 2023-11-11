@@ -16,8 +16,11 @@ public class PolygonCutter {
         List<Line> clippingEdges = cutiingPolygon.getEdges();
         ArrayList<Point> in = polygonToCut.getVertices();
         ArrayList<Point> out = new ArrayList<>();
-        for(Line edge:clippingEdges){
+        for(Line edge: clippingEdges){
             out.clear();
+            if(in.size() < 1){
+                continue;
+            }
             Point v1 = in.get(in.size()-1); //last vertex
             for(Point v2: in){
                 if(edge.isInside(v2)){
@@ -39,7 +42,8 @@ public class PolygonCutter {
                 }
                 v1 = v2;
             }
-            //update the out but think ab how to do it
+            //update the polygon-to-cut
+            in = new ArrayList<>(out);
         }
 
         return new Polygon(out);
