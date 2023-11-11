@@ -32,4 +32,15 @@ public class Rectangle extends Polygon{
         return vertices.get(index);
     }
 
+    public Point countCenter() {
+        int xCenter = Math.min(vertices.get(0).x, vertices.get(3).x) + getWidth()/2;
+        int yCenter = Math.min(vertices.get(0).y, vertices.get(1).y) + getHeight()/2;
+        return new Point(xCenter, yCenter);
+    }
+    public int getWidth(){
+        return Math.abs(vertices.get(0).x - vertices.get(3).x);
+    }
+    public int getHeight(){
+        return Math.abs(vertices.get(0).y - vertices.get(1).y);
+    }
 }

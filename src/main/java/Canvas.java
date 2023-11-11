@@ -1,3 +1,4 @@
+import model.Ellipse;
 import model.Line;
 import model.Point;
 import model.Rectangle;
@@ -162,18 +163,22 @@ public class Canvas {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getButton() == MouseEvent.BUTTON1){
+                    //if Control is down, gets 2 anchor point for a rectangle:
+                    // upper left and lower right vertices
                     if(e.isControlDown()){
-                        System.out.println("isControlDown");
+                        //first vertex (upper left)
                         if(rectangleAnchorPoint.x == -1){
                             rectangleAnchorPoint = new Point(e.getX(), e.getY());
                         }
+                        //second vertex (lower right)
                         else {
-                            Rectangle rect = new Rectangle(); //TODO save the rect somewhere
+                            Rectangle rect = new Rectangle();
                             rect.constructRectangle(new Point(rectangleAnchorPoint.x, rectangleAnchorPoint.y),
                                     new Point(e.getX(), e.getY()));
                             Runnable addRect = () -> rectangles.add(rect);
                             change(addRect);
                             resetAnchorPoint();
+//                            Ellipse el = new Ellipse(rect);
                         }
 
                     }
