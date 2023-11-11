@@ -1,5 +1,6 @@
 import model.Line;
 import model.Point;
+import model.Rectangle;
 import rasterization.RasterBI;
 import rasterops.fill.test.TestBorder;
 import rasterops.rasterize.LinerDDAII;
@@ -31,7 +32,7 @@ public class Canvas {
     private JFrame frame;
     private JPanel panel;
     private RasterBI img;
-    private Point anchorPoint;
+    private Point anchorPoint, rectangleAnchorPoint;
     private LinerDDAII liner;
     private LinerDashed dashedLiner;
     private PolygonerBasic polygoner;
@@ -46,6 +47,7 @@ public class Canvas {
     private ArrayList<Line> lineList;
     private ArrayList<Line> previewLine;
     private ArrayList<Line> previewStrictLine;
+    private ArrayList<Rectangle> rectangles;
 
     public Canvas(int width, int height) {
         frame = new JFrame();
@@ -160,10 +162,26 @@ public class Canvas {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getButton() == MouseEvent.BUTTON1){
-                    if (!Dpressed) {
+                    if(e.isControlDown()){
+                        System.out.println("isControlDown");
+                        if(rectangleAnchorPoint.x == -1){
+                            rectangleAnchorPoint = new Point(e.getX(), e.getY());
+                        }
+                        else {
+                            Rectangle rect = new Rectangle(); //TODO save the rect somewhere
+                            rect.constructRectangle(new Point(rectangleAnchorPoint.x, rectangleAnchorPoint.y),
+                                    new Point(e.getX(), e.getY()));
+                            Runnable addRect = () -> rectangles.add(rect);
+                            change(addRect);
+                            resetAnchorPoint();
+                        }
+
+                    }
+                    else if (!Dpressed && !e.isControlDown()) {
                         Runnable newVertex = () -> polygoner.addVertex(new Point(e.getX(), e.getY()));
                         change(newVertex);
                     }
+
                 }
                 if(e.getButton() == MouseEvent.BUTTON3){
                     polygoner.drawPolygon();
@@ -204,6 +222,9 @@ public class Canvas {
         lineList = new ArrayList<Line>();
         previewLine = new ArrayList<Line>();
         previewStrictLine = new ArrayList<Line>();
+
+        rectangles = new ArrayList<>();
+        rectangleAnchorPoint = new Point(-1, -1);
         anchorPoint = new Point(-1, -1);
 
         withShift = false;
@@ -225,6 +246,7 @@ public class Canvas {
         lineList.clear();
         previewLine.clear();
         previewStrictLine.clear();
+        rectangles.clear();
         polygoner.resetPolygon();
         img.present(panel.getGraphics());
     }
@@ -243,6 +265,10 @@ public class Canvas {
 
         for (Line line: previewStrictLine) {
             new LinerStrict().drawStrictLine(img, line.getP1(), line.getP2(), line.getColor());
+        }
+
+        for (Rectangle pol: rectangles) {
+            polygoner.drawPolygon(pol);
         }
 
         polygoner.drawPolygon();
@@ -287,6 +313,9 @@ public class Canvas {
     private void resetAnchorPoint() {
         anchorPoint.x = -1;
         anchorPoint.y = -1;
+
+        rectangleAnchorPoint.x = -1;
+        rectangleAnchorPoint.y = -1;
     }
     /**
      * Resets the step that is dashed liner
@@ -300,7 +329,7 @@ public class Canvas {
      * Paints the canvas in its background color
      */
     public void clear() {
-        img.clear(new Color(47, 47, 47).getRGB());
+        img.clear(grey.getRGB());
     }
 
     /**

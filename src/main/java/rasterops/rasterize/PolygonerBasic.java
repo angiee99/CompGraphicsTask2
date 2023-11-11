@@ -2,6 +2,7 @@ package rasterops.rasterize;
 
 import model.Point;
 import model.Polygon;
+import model.Rectangle;
 import rasterization.Raster;
 
 import java.util.Optional;
@@ -17,6 +18,12 @@ public class PolygonerBasic implements Polygoner{
     public PolygonerBasic(Raster raster, int color){
         polygon = new Polygon();
         liner = new LinerDDAII();
+        this.raster = raster;
+        this.color = color;
+    }
+    public PolygonerBasic(Raster raster, int color, Polygon polygon){
+        liner = new LinerDDAII();
+        this.polygon = polygon;
         this.raster = raster;
         this.color = color;
     }
@@ -36,6 +43,20 @@ public class PolygonerBasic implements Polygoner{
     }
 
     /**
+     * draws a rectangle, but the logic is same as for any other polygon
+     * @param other rectangle
+     */
+    public void drawPolygon(Rectangle other){
+        for (int i = 0; i < other.getVertexCount() -1; i++) {
+            drawEdge(other.getVertex(i), other.getVertex(i+1), this.color);
+        }
+        if(other.getVertexCount() > 2){
+            drawEdge(other.getVertex(other.getVertexCount() -1),
+                    other.getVertex(0), this.color);
+        }
+    }
+
+    /**
      * Draws the edge between two given points
      * @param p1
      * @param p2
@@ -50,7 +71,7 @@ public class PolygonerBasic implements Polygoner{
      * Adds a new vertex
      * @param p point
      */
-    public void addVertex(Point p){ //dont need raster
+    public void addVertex(Point p){
         polygon.addVertex(p);
     }
 
