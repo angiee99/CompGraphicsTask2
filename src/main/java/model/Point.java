@@ -14,7 +14,7 @@ public class Point{
     }
 
     public double length(){
-        return Math.sqrt(x*x + y*y);
+        return Math.sqrt((double)x*x +(double)y*y);
     }
 
 }

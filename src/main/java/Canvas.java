@@ -3,6 +3,7 @@ import model.Line;
 import model.Point;
 import model.Rectangle;
 import rasterization.RasterBI;
+import rasterops.fill.ScanLine;
 import rasterops.fill.test.TestBorder;
 import rasterops.rasterize.*;
 import rasterops.fill.SeedFill4;
@@ -84,7 +85,7 @@ public class Canvas {
         panel.requestFocusInWindow();
         clear();
 
-
+        test();
         panel.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -207,7 +208,8 @@ public class Canvas {
                     else{
                         predicate =  new TestBackground(grey.getRGB());
                     }
-                    new SeedFill4().fill(img, e.getX(), e.getY(), yellow, predicate);
+//                    new SeedFill4().fill(img, e.getX(), e.getY(), yellow, predicate);
+                    new ScanLine().fill(img, polygoner.getPolygon(), purple.getRGB(), green.getRGB(), polygoner);
                     present(panel.getGraphics());
                 }
             }
@@ -377,7 +379,17 @@ public class Canvas {
         draw();
     }
 
-
+    public void test(){
+        //tests interception
+        Line line1 = new Line(new Point(50, 100), new Point(50, 300));
+        Line line2 = new Line(new Point(500, 130), new Point(500, 500));
+        Point inter = line1.intercept(line2);
+        liner.drawLine(img, line1);
+        liner.drawLine(img, line2);
+        img.setColor(red.getRGB(), inter.x, inter.y);
+        img.present(panel.getGraphics());
+        System.out.println(inter.x + " " + inter.y);
+    }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new Canvas(600, 600).start());
     }

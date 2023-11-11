@@ -44,35 +44,77 @@ public class Line {
     }
 
     public boolean hasYIntercept(double y){
-        return y1 <= y && y <= y2;
+        return (isInRange((int)Math.round(y), y1, y2));
     }
 
     public double yIntercept(double y){
         if(x1 == x2) return x1;
-
+        //TODO check if works correctly for ScanLine
         //kx + q = y
         // x = (y - q)/k
 
         double k = Math.abs((double)(y2 - y1) / (double)(x2 - x1));
         double q = y1 - k*x1;
         double yIntercept = (y - q)/k;
-        return yIntercept; //x coordinate
+        if(isInRange((int)yIntercept, x1, x2)){
+            return yIntercept; //x coordinate
+        }
+        return -1;
     }
 
-    public Point intercept(Line other){
-        //TODO
-        return null;
+    public double xIntercept(double x){
+        if(y1 == y2) return y1;
+        double k = Math.abs((double)(y2 - y1) / (double)(x2 - x1));
+        double q = y1 - k*x1;
+        return k*x1 + q;
     }
+    public Point intercept(Line other){
+        //if both verticall
+        if(x1 == x2 && other.x1 == other.x2 ) {
+            return new Point(-1, -1); // no intercept
+        }
+
+        //if both horizontal
+        if(y1 == y2 && other.y1 == other.y2){
+            return new Point(-1, -1); // no intercept
+        }
+
+        // normal case
+        int x3 = other.x1; int y3 = other.y1;
+        int x4 = other.x2; int y4 = other.y2;
+        //if divisor = 0? or inf?
+        double divisor = (double) ((x1-x2)*(y3 - y4)) - (double) ((y1-y2)*(x3-x4));
+
+        double x0UpperValue = (double)(x1*y2 - x2*y1) * (double)(x3 - x4) -
+                (double) (x3*y4 - x4*y3) * (double)(x1 - x2);
+
+        double y0UpperValue = (double)(x1*y2 - x2*y1) * (double)(y3 - y4) -
+                (double) (x3*y4 - x4*y3) * (double)(y1 - y2);
+
+        int x0 =(int) Math.round(x0UpperValue/divisor);
+        int y0 = (int) Math.round(y0UpperValue/divisor);
+
+        if(isInRange(x0, x1, x2) && isInRange(y0, y1, y2)){
+            return new Point(x0, y0);
+        }
+        else {
+            return new Point(-1, -1); // no interception
+        }
+    }
+    public boolean isInRange(int x, int a, int b){
+        int min = Math.min(a, b);
+        int max = Math.max(a, b);
+
+        return (x >= min && x <= max);
+    }
+
     public boolean isInside(Point p){
         final Point t = new Point(x2  - x1, y2 - y1);
-        final Point n = new Point(-t.y, t.x); // if not the wanted side then change to (t.y, -t.x); - deside just by testing
+        final Point n = new Point(t.y, -t.x); // if not the wanted side then change to (-t.y, t.x);
         final Point v = new Point(p.x - x1, p.y - y1);
 
-        final Point nNorm = new Point(n.x /n.length(), n.y /n.length()); // what if length == 0
-        final Point vNorm = new Point(v.x /v.length(), v.y /v.length()); // what if length == 0
-
-        final double cosAlpha = nNorm.x * vNorm.x + nNorm.y * vNorm.y;
-
+        final double cosAlpha = (double)n.x * v.x + (double)n.y * v.y;
+        System.out.println(cosAlpha);
         return cosAlpha > 0;
     }
 

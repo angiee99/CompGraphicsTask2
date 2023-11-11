@@ -50,7 +50,8 @@ public class ScanLine {
             List<Point> intercepts = new ArrayList<>();
             for (Line line: edges) {
                 if(line.hasYIntercept(i)){
-                    intercepts.add(new Point(line.yIntercept(i), i));
+                    if(line.yIntercept(i)!= -1)
+                        intercepts.add(new Point(line.yIntercept(i), i));
                 }
             }
             //sort
