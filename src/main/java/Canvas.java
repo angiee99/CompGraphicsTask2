@@ -4,10 +4,7 @@ import model.Point;
 import model.Rectangle;
 import rasterization.RasterBI;
 import rasterops.fill.test.TestBorder;
-import rasterops.rasterize.LinerDDAII;
-import rasterops.rasterize.LinerDashed;
-import rasterops.rasterize.LinerStrict;
-import rasterops.rasterize.PolygonerBasic;
+import rasterops.rasterize.*;
 import rasterops.fill.SeedFill4;
 import rasterops.fill.test.TestBackground;
 
@@ -42,13 +39,14 @@ public class Canvas {
     private boolean Dpressed;
     private int dashedLineStep;
     private int stepChange;
-    private Color red, green, grey, yellow;
+    private Color red, green, grey, yellow, purple;
 
     // structures
     private ArrayList<Line> lineList;
     private ArrayList<Line> previewLine;
     private ArrayList<Line> previewStrictLine;
     private ArrayList<Rectangle> rectangles;
+    private ArrayList<Ellipse> ellipses;
 
     public Canvas(int width, int height) {
         frame = new JFrame();
@@ -175,10 +173,20 @@ public class Canvas {
                             Rectangle rect = new Rectangle();
                             rect.constructRectangle(new Point(rectangleAnchorPoint.x, rectangleAnchorPoint.y),
                                     new Point(e.getX(), e.getY()));
-                            Runnable addRect = () -> rectangles.add(rect);
+                            Runnable addRect;
+                            // if with Shift - also draws the ellipse
+                            if(e.isShiftDown()){
+                                addRect = () -> {
+                                    rectangles.add(rect);
+                                    Ellipse el = new Ellipse(rect);
+                                    ellipses.add(el);
+                                };
+                            }else{
+                                addRect = () -> rectangles.add(rect);
+                            }
+
                             change(addRect);
                             resetAnchorPoint();
-//                            Ellipse el = new Ellipse(rect);
                         }
 
                     }
@@ -229,6 +237,8 @@ public class Canvas {
         previewStrictLine = new ArrayList<Line>();
 
         rectangles = new ArrayList<>();
+        ellipses = new ArrayList<>();
+
         rectangleAnchorPoint = new Point(-1, -1);
         anchorPoint = new Point(-1, -1);
 
@@ -241,6 +251,7 @@ public class Canvas {
         green= new Color(0, 155, 20);
         grey = new Color(47, 47, 47);
         yellow = new Color(255, 255, 0);
+        purple = new Color(235, 25, 230);
     }
     /**
      * Clears the canvas and resets all the structures saved
@@ -248,10 +259,13 @@ public class Canvas {
     public void clearCanvas() {
         clear();
         resetAnchorPoint();
+
         lineList.clear();
         previewLine.clear();
         previewStrictLine.clear();
         rectangles.clear();
+        ellipses.clear();
+
         polygoner.resetPolygon();
         img.present(panel.getGraphics());
     }
@@ -274,6 +288,10 @@ public class Canvas {
 
         for (Rectangle pol: rectangles) {
             polygoner.drawPolygon(pol);
+        }
+
+        for (Ellipse el:ellipses) {
+            new Ellipser().drawEllipse(el, img, purple.getRGB());
         }
 
         polygoner.drawPolygon();
