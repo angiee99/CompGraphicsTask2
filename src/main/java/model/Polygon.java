@@ -10,6 +10,14 @@ public class Polygon {
     public Polygon(){
         vertices = new ArrayList<Point>();
     }
+    public Polygon(ArrayList<Point> vertices){
+        this.vertices = new ArrayList<>(vertices); // is it ok?
+    }
+
+    public ArrayList<Point> getVertices(){
+        return vertices;
+    }
+
 
     /**
      * Adds a new vertex to the corresponding index in the list,
@@ -154,9 +162,9 @@ public class Polygon {
     public List<Line> getEdges(){
         List<Line> edges = new ArrayList<>();
         for (int i = 0; i < getVertexCount() - 1; i++) {
-            edges.add(new Line(vertices.get(i), vertices.get(i+1)));
+            edges.add(new Line(this.vertices.get(i), this.vertices.get(i+1)));
         }
-        edges.add(new Line(vertices.get(getVertexCount() - 1), vertices.get(0)));
+        edges.add(new Line(this.vertices.get(getVertexCount() - 1), this.vertices.get(0)));
         return edges;
     }
 

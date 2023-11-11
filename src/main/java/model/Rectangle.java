@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Rectangle extends Polygon{
     private ArrayList<Point> vertices;
@@ -25,6 +26,16 @@ public class Rectangle extends Polygon{
     @Override
     public int getVertexCount() {
         return vertices.size(); //always should be 4
+    }
+
+    @Override
+    public List<Line> getEdges() {
+        List<Line> edges = new ArrayList<>();
+        for (int i = 0; i < getVertexCount() - 1; i++) {
+            edges.add(new Line(this.vertices.get(i), this.vertices.get(i+1)));
+        }
+        edges.add(new Line(this.vertices.get(getVertexCount() - 1), this.vertices.get(0)));
+        return edges;
     }
 
     @Override

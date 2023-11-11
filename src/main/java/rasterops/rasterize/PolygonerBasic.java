@@ -28,6 +28,9 @@ public class PolygonerBasic implements Polygoner{
         this.color = color;
     }
 
+    public void setPolygon(Polygon polygon){
+        this.polygon = polygon;
+    }
     /**
      * Draws a polygon based on saved vertices
      */
@@ -41,7 +44,15 @@ public class PolygonerBasic implements Polygoner{
                     polygon.getVertex(0), this.color);
         }
     }
-
+    public void drawPolygon(Polygon polygon, int color){
+        for (int i = 0; i < polygon.getVertexCount() -1; i++) {
+            drawEdge(polygon.getVertex(i), polygon.getVertex(i+1), color);
+        }
+        if(polygon.getVertexCount() > 2){
+            drawEdge(polygon.getVertex(polygon.getVertexCount() -1),
+                    polygon.getVertex(0), color);
+        }
+    }
     /**
      * draws a rectangle, but the logic is same as for any other polygon
      * @param other rectangle

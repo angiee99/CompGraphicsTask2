@@ -1,7 +1,9 @@
 import model.Ellipse;
 import model.Line;
 import model.Point;
+import model.Polygon;
 import model.Rectangle;
+import objectop.PolygonCutter;
 import rasterization.RasterBI;
 import rasterops.fill.ScanLine;
 import rasterops.fill.test.TestBorder;
@@ -92,7 +94,17 @@ public class Canvas {
                 if (e.getKeyCode() == KeyEvent.VK_C) {
                     clearCanvas();
                 }
-
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    Runnable cut = new Runnable() {
+                        @Override
+                        public void run() {
+                            Polygon changed = new PolygonCutter().cut(rectangles.get(0), polygoner.getPolygon());
+//                            polygoner.drawPolygon(changed, yellow.getRGB());
+                            polygoner.setPolygon(changed);
+                        };
+                    };
+                    change(cut);
+                }
                 // enables to draw a strict line
                 if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
                     withShift = true;
@@ -208,8 +220,8 @@ public class Canvas {
                     else{
                         predicate =  new TestBackground(grey.getRGB());
                     }
-//                    new SeedFill4().fill(img, e.getX(), e.getY(), yellow, predicate);
-                    new ScanLine().fill(img, polygoner.getPolygon(), purple.getRGB(), green.getRGB(), polygoner);
+                    new SeedFill4().fill(img, e.getX(), e.getY(), yellow, predicate);
+//                    new ScanLine().fill(img, polygoner.getPolygon(), purple.getRGB(), green.getRGB(), polygoner);
                     present(panel.getGraphics());
                 }
             }
