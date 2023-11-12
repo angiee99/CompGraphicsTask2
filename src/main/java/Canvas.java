@@ -100,8 +100,9 @@ public class Canvas {
                         mainPolygon = new PolygonCutter().cut(rectangles.get(rectangles.size()-1),
                                 mainPolygon);
                         rectangles.remove(rectangles.size()-1); //remove the cutting polygon
-//                        new ScanLine().fill(img, mainPolygon, purple.getRGB());
-//                        polygoner.drawPolygon(mainPolygon);
+                        // filling the resulting polygon with ScanLine
+                        new ScanLine().fill(img, mainPolygon, purple.getRGB());
+                        polygoner.drawPolygon(mainPolygon);
                     };
                     change(cut);
                 }
