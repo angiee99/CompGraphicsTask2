@@ -95,18 +95,23 @@ public class Canvas {
                     clearCanvas();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_ENTER){
-                    //TODO edit the handling of cropping
-                    Runnable cut = new Runnable() {
-                        @Override
-                        public void run() {
-                            Polygon changed = new PolygonCutter().cut(rectangles.get(rectangles.size()-1),
-                                    mainPolygon);
-//                            polygoner.setPolygon(changed);
-                            mainPolygon = changed;
-                            rectangles.remove(rectangles.size()-1); //remove the cutting polygon
-                        };
+
+                    Runnable cut = () -> {
+                        mainPolygon = new PolygonCutter().cut(rectangles.get(rectangles.size()-1),
+                                mainPolygon);
+                        rectangles.remove(rectangles.size()-1); //remove the cutting polygon
+//                        new ScanLine().fill(img, mainPolygon, purple.getRGB());
+//                        polygoner.drawPolygon(mainPolygon);
                     };
                     change(cut);
+                }
+                // fill with scan line
+                if(e.getKeyCode() == KeyEvent.VK_F){
+                    Runnable scanlineFill = () -> {
+                        new ScanLine().fill(img, mainPolygon, purple.getRGB());
+                        polygoner.drawPolygon(mainPolygon);
+                    };
+                    change(scanlineFill);
                 }
                 // enables to draw a strict line
                 if (e.getKeyCode() == KeyEvent.VK_SHIFT) {

@@ -44,22 +44,13 @@ public class Line {
     }
 
     public boolean hasYIntercept(double y){
-        return (isInRange((int)Math.round(y), y1, y2));
+        return (isInRange((int)Math.round(y), y1, y2-1));
     }
 
     public double yIntercept(double y){
         if(x1 == x2) return x1;
-        //TODO check if works correctly for ScanLine
-        //kx + q = y
-        // x = (y - q)/k
-
-        double k = Math.abs((double)(y2 - y1) / (double)(x2 - x1));
-        double q = y1 - k*x1;
-        double yIntercept = (y - q)/k;
-        if(isInRange((int)yIntercept, x1, x2)){
-            return yIntercept; //x coordinate
-        }
-        return -1;
+        Point interc = intercept(new Line(new Point(0, Math.round(y)), new Point(600, Math.round(y))));
+        return interc.x;
     }
 
     public double xIntercept(double x){

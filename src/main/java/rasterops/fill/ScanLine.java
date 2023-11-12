@@ -5,13 +5,12 @@ import model.Point;
 import model.Polygon;
 import rasterization.Raster;
 import rasterops.rasterize.LinerDDAII;
-import rasterops.rasterize.PolygonerBasic;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ScanLine {
-    public void fill(Raster raster, Polygon polygon, int fillColor, int polygonColor, PolygonerBasic polygoner){
+    public void fill(Raster raster, Polygon polygon, int fillColor){
         List<Line> edges = polygon.getEdges();
         //remove horizontal line
         for (int i = 0; i < edges.size(); i++) {
@@ -19,21 +18,15 @@ public class ScanLine {
                 edges.remove(i);
             }
         }
-        // orient the lines
+        // orient the lines +works
         for (int i = 0; i < edges.size(); i++) {
             edges.set(i, edges.get(i).oriental());
         }
-//        for (Line line:edges) {
-//            if (line.isHorizontal()){
-//                edges.remove(line);
-//            }
-//            line = line.oriental(); // hope it replaces the previous one with the oriental
-//        }
 
-        // yMin and yMax (of Polygon)
+        // yMin and yMax (of Polygon)  +works
         int yMin = 100000;
         int yMax = -100000;
-        // not correct search mb bc we removed the horozontal lines
+
         for (int i = 0; i < polygon.getVertexCount(); i++) {
             Point curr = polygon.getVertex(i);
             if(curr.y < yMin){
@@ -44,14 +37,13 @@ public class ScanLine {
             }
         }
 
-        // search intercepts
-
         for (int i = yMin; i < yMax; i++) {
             List<Point> intercepts = new ArrayList<>();
             for (Line line: edges) {
                 if(line.hasYIntercept(i)){
-                    if(line.yIntercept(i)!= -1)
-                        intercepts.add(new Point(line.yIntercept(i), i));
+                    double intercept = line.yIntercept(i);
+                    if(intercept!= -1)
+                        intercepts.add(new Point(intercept, i));
                 }
             }
             //sort
@@ -72,6 +64,5 @@ public class ScanLine {
             }
         }
 
-        polygoner.drawPolygon(polygon);
     }
 }
