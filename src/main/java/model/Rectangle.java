@@ -28,6 +28,17 @@ public class Rectangle extends Polygon{
         return vertices.size(); //always should be 4
     }
 
+    public void addVertex(Point p) {
+        if (getVertexCount() < 2) {
+            vertices.add(p);
+        } else if (getVertexCount() == 2) {
+           vertices.add(1, p);
+        } else {
+            int[] edge = super.closestEdge(p);
+            vertices.add(edge[0] + 1, p);
+//            addVertexAtIndex(p, edge[0] + 1);
+        }
+    }
     @Override
     public List<Line> getEdges() {
         List<Line> edges = new ArrayList<>();

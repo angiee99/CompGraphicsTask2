@@ -42,7 +42,7 @@ public class Polygon {
      * @param p point
      * @return indexes of points that form the closest edge to point p
      */
-    private int[] closestEdge(Point p){
+    int[] closestEdge(Point p){
         int[] closestEdge = new int[]{0, 1};
         double minDistance = distanceTo(p, getVertex(0), getVertex(1) );
 

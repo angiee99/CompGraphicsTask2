@@ -219,19 +219,31 @@ public class Canvas {
 
                 }
                 if(e.getButton() == MouseEvent.BUTTON3){
-                    polygoner.drawPolygon(mainPolygon);
-                    Predicate<Integer> predicate;
-                    // if with Alt (Option for Mac) -> testing the border
-                    if(e.isAltDown()){
-                        predicate = new TestBorder(green.getRGB(), yellow.getRGB());
+                    if (e.isShiftDown()) {
+                        if(rectangles.size()>0){
+                            Runnable addVRect = ()-> {
+                                rectangles.get(rectangles.size()-1).
+                                        addVertex(new Point(e.getX(), e.getY()));
+                            };
+                            change(addVRect);
+                        }
                     }
-                    // else testing the background color
                     else{
-                        predicate =  new TestBackground(grey.getRGB());
-                    }
-                    new SeedFill4().fill(img, e.getX(), e.getY(), yellow, predicate);
+                        polygoner.drawPolygon(mainPolygon);
+                        Predicate<Integer> predicate;
+                        // if with Alt (Option for Mac) -> testing the border
+                        if(e.isAltDown()){
+                            predicate = new TestBorder(green.getRGB(), yellow.getRGB());
+                        }
+                        // else testing the background color
+                        else{
+                            predicate =  new TestBackground(grey.getRGB());
+                        }
+                        new SeedFill4().fill(img, e.getX(), e.getY(), yellow, predicate);
 //                    new ScanLine().fill(img, mainPolygon, purple.getRGB(), green.getRGB(), polygoner);
-                    present(panel.getGraphics());
+                        present(panel.getGraphics());
+                    }
+
                 }
             }
 
