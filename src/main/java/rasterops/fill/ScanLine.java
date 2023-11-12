@@ -72,6 +72,6 @@ public class ScanLine {
             }
         }
 
-        polygoner.drawPolygon();
+        polygoner.drawPolygon(polygon);
     }
 }

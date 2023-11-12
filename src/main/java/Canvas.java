@@ -48,6 +48,7 @@ public class Canvas {
     private ArrayList<Line> lineList;
     private ArrayList<Line> previewLine;
     private ArrayList<Line> previewStrictLine;
+    private Polygon mainPolygon;
     private ArrayList<Rectangle> rectangles;
     private ArrayList<Ellipse> ellipses;
 
@@ -98,9 +99,11 @@ public class Canvas {
                     Runnable cut = new Runnable() {
                         @Override
                         public void run() {
-                            Polygon changed = new PolygonCutter().cut(rectangles.get(0), polygoner.getPolygon());
-//                            polygoner.drawPolygon(changed, yellow.getRGB()); -> array of polygons just
-                            polygoner.setPolygon(changed);
+                            Polygon changed = new PolygonCutter().cut(rectangles.get(rectangles.size()-1),
+                                    mainPolygon);
+//                            polygoner.setPolygon(changed);
+                            mainPolygon = changed;
+                            rectangles.remove(rectangles.size()-1); //remove the cutting polygon
                         };
                     };
                     change(cut);
@@ -119,9 +122,9 @@ public class Canvas {
                         public void mousePressed(MouseEvent e) {
                         Runnable deleteVertex = () -> {
                             Point curr = new Point(e.getX(), e.getY());
-                            Optional<Point> closestPoint = polygoner.isPolVertex(curr);
+                            Optional<Point> closestPoint = mainPolygon.isPolVertex(curr);
                             if (!closestPoint.isEmpty()) {
-                                polygoner.deleteVertex(closestPoint.get());
+                                mainPolygon.removeVertex(closestPoint.get());
                             }
                         };
                         if (Dpressed) {
@@ -204,13 +207,13 @@ public class Canvas {
 
                     }
                     else if (!Dpressed && !e.isControlDown()) {
-                        Runnable newVertex = () -> polygoner.addVertex(new Point(e.getX(), e.getY()));
+                        Runnable newVertex = () -> mainPolygon.addVertex(new Point(e.getX(), e.getY()));
                         change(newVertex);
                     }
 
                 }
                 if(e.getButton() == MouseEvent.BUTTON3){
-                    polygoner.drawPolygon();
+                    polygoner.drawPolygon(mainPolygon);
                     Predicate<Integer> predicate;
                     // if with Alt (Option for Mac) -> testing the border
                     if(e.isAltDown()){
@@ -221,7 +224,7 @@ public class Canvas {
                         predicate =  new TestBackground(grey.getRGB());
                     }
                     new SeedFill4().fill(img, e.getX(), e.getY(), yellow, predicate);
-//                    new ScanLine().fill(img, polygoner.getPolygon(), purple.getRGB(), green.getRGB(), polygoner);
+//                    new ScanLine().fill(img, mainPolygon, purple.getRGB(), green.getRGB(), polygoner);
                     present(panel.getGraphics());
                 }
             }
@@ -250,6 +253,7 @@ public class Canvas {
         previewLine = new ArrayList<Line>();
         previewStrictLine = new ArrayList<Line>();
 
+        mainPolygon = new Polygon();
         rectangles = new ArrayList<>();
         ellipses = new ArrayList<>();
 
@@ -280,7 +284,7 @@ public class Canvas {
         rectangles.clear();
         ellipses.clear();
 
-        polygoner.resetPolygon();
+        mainPolygon.clear();
         img.present(panel.getGraphics());
     }
 
@@ -305,10 +309,10 @@ public class Canvas {
         }
 
         for (Ellipse el:ellipses) {
-            new Ellipser().drawEllipse(el, img, purple.getRGB());
+            new Ellipser(img, purple.getRGB()).drawEllipse(el);
         }
 
-        polygoner.drawPolygon();
+        polygoner.drawPolygon(mainPolygon);
         img.present(panel.getGraphics());
     }
 
@@ -400,7 +404,7 @@ public class Canvas {
         liner.drawLine(img, line2);
         img.setColor(red.getRGB(), inter.x, inter.y);
         img.present(panel.getGraphics());
-        System.out.println(inter.x + " " + inter.y);
+//        System.out.println(inter.x + " " + inter.y);
     }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new Canvas(600, 600).start());

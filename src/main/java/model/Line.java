@@ -114,7 +114,6 @@ public class Line {
         final Point v = new Point(p.x - x1, p.y - y1);
 
         final double cosAlpha = (double)n.x * v.x + (double)n.y * v.y;
-        System.out.println(cosAlpha);
         return cosAlpha > 0;
     }
 

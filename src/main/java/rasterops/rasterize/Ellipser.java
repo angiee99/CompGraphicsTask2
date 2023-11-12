@@ -2,10 +2,24 @@ package rasterops.rasterize;
 
 import model.Ellipse;
 import model.Point;
+import model.Polygon;
 import rasterization.Raster;
 
 public class Ellipser implements Polygoner{
-    public void drawEllipse(Ellipse ellipse, Raster raster, int color){
+    private Raster raster;
+    private int color;
+
+    public Ellipser(Raster raster, int color) {
+        this.raster = raster;
+        this.color = color;
+    }
+
+    @Override
+    public void drawPolygon(Polygon polygon) {
+        drawEllipse((Ellipse)polygon);
+    }
+
+    public void drawEllipse(Ellipse ellipse){
         float dx, dy, d1, d2;
         int xc, yc, rx, ry, x, y;
 
@@ -77,13 +91,7 @@ public class Ellipser implements Polygoner{
         raster.setColor(color, xc - x, yc - y);
     }
 
-    @Override
-    public void drawPolygon() {
-        //TODO refactor interface
-    }
 
-    @Override
-    public void drawEdge(Point p1, Point p2, int color) {
 
-    }
+
 }

@@ -1,6 +1,7 @@
 package model;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents a polygon in 2D raster by its vertices
@@ -152,6 +153,20 @@ public class Polygon {
         return vertices.size();
     }
 
+    /**
+     * Determines if a passed point is close enough to existent vertex
+     * @param p
+     * @return Optional of closest existent vertex
+     */
+    public Optional<Point> isPolVertex(Point p){
+        for (int i = 0; i < getVertexCount(); i++) {
+            Point curr = getVertex(i);
+            if(isCloseEnough(p,curr)){
+                return Optional.of(curr);
+            }
+        }
+        return  Optional.empty();
+    }
     /**
      * deletes all saved vertices of a polygon
      */
