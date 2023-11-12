@@ -95,16 +95,20 @@ public class Canvas {
                     clearCanvas();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    if(rectangles.size() > 0){
+                        Runnable cut = () -> {
 
-                    Runnable cut = () -> {
-                        mainPolygon = new PolygonCutter().cut(rectangles.get(rectangles.size()-1),
-                                mainPolygon);
-                        rectangles.remove(rectangles.size()-1); //remove the cutting polygon
-                        // filling the resulting polygon with ScanLine
-                        new ScanLine().fill(img, mainPolygon, purple.getRGB());
-                        polygoner.drawPolygon(mainPolygon);
-                    };
-                    change(cut);
+                            Polygon p = new PolygonCutter().cut(rectangles.get(rectangles.size()-1),
+                                    mainPolygon);
+//                            rectangles.remove(rectangles.size()-1); //remove the cutting polygon
+                            // filling the resulting polygon with ScanLine
+                            new ScanLine().fill(img, p, purple.getRGB());
+//                            mainPolygon = p;
+                            polygoner.drawPolygon(p);
+                        };
+                        change(cut);
+                    }
+
                 }
                 // fill with scan line
                 if(e.getKeyCode() == KeyEvent.VK_F){

@@ -89,7 +89,7 @@ public class Line {
             return new Point(x0, y0);
         }
         else {
-            return new Point(-1, -1); // no interception
+            return new Point(-2, -2); // no interception if we treat it like segments, not lines
         }
     }
     public boolean isInRange(int x, int a, int b){
@@ -107,6 +107,54 @@ public class Line {
         final double cosAlpha = (double)n.x * v.x + (double)n.y * v.y;
         return cosAlpha > 0;
     }
+
+    /**
+     * Calculates the distance between point and line
+     * @param point
+     * @return
+     */
+    public double distanceTo(Point point) {
+        //refactor
+        Point p1 = getP1();
+        Point p2 = getP2();
+
+        double x1 = p1.x;
+        double y1 = p1.y;
+        double x2 = p2.x;
+        double y2 = p2.y;
+        double x = point.x;
+        double y = point.y;
+
+        double A = x - x1;
+        double B = y - y1;
+        double C = x2 - x1;
+        double D = y2 - y1;
+
+        double dot = A * C + B * D;
+        double len_sq = C * C + D * D;
+        double param = -1;
+
+        if (len_sq != 0) // zero length line
+            param = dot / len_sq;
+
+        double xx, yy;
+
+        if (param < 0) {
+            xx = x1;
+            yy = y1;
+        } else if (param > 1) {
+            xx = x2;
+            yy = y2;
+        } else {
+            xx = x1 + param * C;
+            yy = y1 + param * D;
+        }
+
+        double dx = x - xx;
+        double dy = y - yy;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
 
     public Point getP1(){
         return new Point(x1, y1);

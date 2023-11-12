@@ -26,7 +26,11 @@ public class PolygonCutter {
                 if(edge.isInside(v2)){
                     if(!edge.isInside(v1)){
                         Point intercept = edge.intercept(new Line(v1,v2));
-                        if(intercept.x!= -1 && intercept.y!=-1){
+                        if(intercept.x == -2 && intercept.y == -2){
+                            // sometimes maybe we need to add v2, dependidng if v2 is inside or not
+                            out.add(closestCuttingPoint(edge, v2));
+                        }
+                        else if(intercept.x!= -1 && intercept.y!=-1){
                             out.add(intercept); //var.4
                         }
                     }
@@ -35,7 +39,11 @@ public class PolygonCutter {
                 else{
                     if(edge.isInside(v1)){
                         Point intercept = edge.intercept(new Line(v1,v2));
-                        if(intercept.x!= -1 && intercept.y!=-1){
+                        if(intercept.x == -2 && intercept.y == -2){
+                            // sometimes maybe we need to add v2, dependidng if v2 is inside or not
+                            out.add(closestCuttingPoint(edge, v2));
+                        }
+                         else if(intercept.x!= -1 && intercept.y!=-1){
                             out.add(intercept); //var.2
                         }
                     }
@@ -49,4 +57,14 @@ public class PolygonCutter {
         return new Polygon(out);
     }
 
+    private Point closestCuttingPoint(Line edge, Point p){
+        double distToP1 = new Point(edge.getX1() - p.x, edge.getY1() - p.y).length();
+        double distToP2 = new Point(edge.getX2() - p.x, edge.getY2() - p.y).length();
+        if(distToP1 <= distToP2){
+            return edge.getP1();
+        }
+        else{
+            return edge.getP2();
+        }
+    }
 }
