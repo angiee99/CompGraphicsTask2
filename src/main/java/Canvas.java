@@ -104,7 +104,6 @@ public class Canvas {
                             // filling the resulting polygon with ScanLine
                             new ScanLine().fill(img, p, purple.getRGB());
                             mainPolygon = p;
-//                            polygoner.drawPolygon(p);
                         };
                         change(cut);
                     }
@@ -243,8 +242,13 @@ public class Canvas {
                         else{
                             predicate =  new TestBackground(grey.getRGB());
                         }
-                        new SeedFill4().fill(img, e.getX(), e.getY(), yellow, predicate);
-//                    new ScanLine().fill(img, mainPolygon, purple.getRGB(), green.getRGB(), polygoner);
+
+                        if(e.isControlDown()){
+                            new SeedFill4().fillPattern(img, e.getX(), e.getY(), yellow, predicate);
+                        }
+                        else {
+                            new SeedFill4().fill(img, e.getX(), e.getY(), yellow, predicate);
+                        }
                         present(panel.getGraphics());
                     }
 

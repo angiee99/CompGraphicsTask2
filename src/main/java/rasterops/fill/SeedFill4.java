@@ -29,4 +29,24 @@ public class SeedFill4 implements SeedFill {
         fill(img, c, r+1, fillColor, isInArea);
         fill(img, c, r-1, fillColor, isInArea);
     }
+    public void fillPattern(Raster img, int c, int r, Color fillColor, Predicate<Integer> isInArea) {
+
+        if( img.getColor(c, r).isEmpty())
+            return;
+        int pixelColor = img.getColor(c, r).get();
+
+        // comparing colors
+        if(!isInArea.test(pixelColor)){
+            return;
+        }
+        PatternFill pattern = new PatternFill();
+        // draw pixel on x, y
+        img.setColor( pattern.paint(c, r), c, r);
+
+        // recursion
+        fillPattern(img, c + 1, r, fillColor, isInArea);
+        fillPattern(img, c - 1, r, fillColor, isInArea);
+        fillPattern(img, c, r+1, fillColor, isInArea);
+        fillPattern(img, c, r-1, fillColor, isInArea);
+    }
 }
