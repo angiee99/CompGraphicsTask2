@@ -47,15 +47,8 @@ public class ScanLine {
                 }
             }
             //sort
-            for (int k = 0; k < intercepts.size(); k++) {
-                for (int j = k+1; j < intercepts.size(); j++) {
-                    if(intercepts.get(k).x > intercepts.get(j).x){
-                        Point temp = intercepts.get(k);
-                        intercepts.set(k, intercepts.get(j));
-                        intercepts.set(j, temp);
-                    }
-                }
-            }
+            mergeSort(intercepts);
+
             // fill between even and odd intercepts -> works weird
             for (int l = 0; l < intercepts.size()-1; l+=2) {
                 Point p1 = intercepts.get(l);
@@ -64,5 +57,39 @@ public class ScanLine {
             }
         }
 
+    }
+    public void mergeSort(List<Point> points) {
+        if (points.size() <= 1) {
+            return; // Already sorted
+        }
+
+        int mid = points.size() / 2;
+        ArrayList<Point> left = new ArrayList<>(points.subList(0, mid));
+        ArrayList<Point> right = new ArrayList<>(points.subList(mid, points.size()));
+
+        mergeSort(left);
+        mergeSort(right);
+
+        merge(points, left, right);
+    }
+
+    private  void merge(List<Point> points, ArrayList<Point> left, ArrayList<Point> right) {
+        int i = 0, j = 0, k = 0;
+
+        while (i < left.size() && j < right.size()) {
+            if (left.get(i).x <= right.get(j).x) {
+                points.set(k++, left.get(i++));
+            } else {
+                points.set(k++, right.get(j++));
+            }
+        }
+
+        while (i < left.size()) {
+            points.set(k++, left.get(i++));
+        }
+
+        while (j < right.size()) {
+            points.set(k++, right.get(j++));
+        }
     }
 }
