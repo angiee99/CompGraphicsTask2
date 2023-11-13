@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Rectangle extends Polygon{
-    private ArrayList<Point> vertices;
+//    private ArrayList<Point> vertices;
     public Rectangle(){
         vertices = new ArrayList<>();
     }
@@ -23,36 +23,6 @@ public class Rectangle extends Polygon{
         vertices.add(upperRight);
     }
 
-    @Override
-    public int getVertexCount() {
-        return vertices.size(); //always should be 4
-    }
-
-    public void addVertex(Point p) {
-        if (getVertexCount() < 2) {
-            vertices.add(p);
-        } else if (getVertexCount() == 2) {
-           vertices.add(1, p);
-        } else {
-            int[] edge = super.closestEdge(p);
-            vertices.add(edge[0] + 1, p);
-//            addVertexAtIndex(p, edge[0] + 1);
-        }
-    }
-    @Override
-    public List<Line> getEdges() {
-        List<Line> edges = new ArrayList<>();
-        for (int i = 0; i < getVertexCount() - 1; i++) {
-            edges.add(new Line(this.vertices.get(i), this.vertices.get(i+1)));
-        }
-        edges.add(new Line(this.vertices.get(getVertexCount() - 1), this.vertices.get(0)));
-        return edges;
-    }
-
-    @Override
-    public Point getVertex(int index) {
-        return vertices.get(index);
-    }
 
     public Point countCenter() {
         int xCenter = Math.min(vertices.get(0).x, vertices.get(3).x) + getWidth()/2;

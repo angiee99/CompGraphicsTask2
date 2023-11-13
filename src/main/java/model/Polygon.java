@@ -7,7 +7,7 @@ import java.util.Optional;
  * Represents a polygon in 2D raster by its vertices
  */
 public class Polygon {
-    private ArrayList<Point> vertices;
+    protected ArrayList<Point> vertices;
     public Polygon(){
         vertices = new ArrayList<Point>();
     }
