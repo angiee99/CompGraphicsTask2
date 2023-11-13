@@ -49,7 +49,7 @@ public class Line {
 
     public double yIntercept(double y){
         if(x1 == x2) return x1;
-        Point interc = intercept(new Line(new Point(0, Math.round(y)), new Point(600, Math.round(y))));
+        Point interc = lineIntercept(new Line(new Point(0, Math.round(y)), new Point(600, Math.round(y))));
         return interc.x;
     }
 
@@ -59,7 +59,8 @@ public class Line {
         double q = y1 - k*x1;
         return k*x1 + q;
     }
-    public Point intercept(Line other){
+
+    public Point lineIntercept(Line other){
         //if both verticall
         if(x1 == x2 && other.x1 == other.x2 ) {
             return new Point(-1, -1); // no intercept
@@ -85,12 +86,7 @@ public class Line {
         int x0 =(int) Math.round(x0UpperValue/divisor);
         int y0 = (int) Math.round(y0UpperValue/divisor);
 
-        if(isInRange(x0, x1, x2) && isInRange(y0, y1, y2)){
-            return new Point(x0, y0);
-        }
-        else {
-            return new Point(-2, -2); // no interception if we treat it like segments, not lines
-        }
+        return new Point(x0, y0);
     }
     public boolean isInRange(int x, int a, int b){
         int min = Math.min(a, b);

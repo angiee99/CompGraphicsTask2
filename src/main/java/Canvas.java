@@ -100,11 +100,11 @@ public class Canvas {
 
                             Polygon p = new PolygonCutter().cut(rectangles.get(rectangles.size()-1),
                                     mainPolygon);
-//                            rectangles.remove(rectangles.size()-1); //remove the cutting polygon
+                            rectangles.remove(rectangles.size()-1); //remove the cutting polygon
                             // filling the resulting polygon with ScanLine
                             new ScanLine().fill(img, p, purple.getRGB());
-//                            mainPolygon = p;
-                            polygoner.drawPolygon(p);
+                            mainPolygon = p;
+//                            polygoner.drawPolygon(p);
                         };
                         change(cut);
                     }
@@ -417,17 +417,7 @@ public class Canvas {
         draw();
     }
 
-    public void test(){
-        //tests interception
-        Line line1 = new Line(new Point(50, 100), new Point(50, 300));
-        Line line2 = new Line(new Point(500, 130), new Point(500, 500));
-        Point inter = line1.intercept(line2);
-        liner.drawLine(img, line1);
-        liner.drawLine(img, line2);
-        img.setColor(red.getRGB(), inter.x, inter.y);
-        img.present(panel.getGraphics());
-//        System.out.println(inter.x + " " + inter.y);
-    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new Canvas(600, 600).start());
     }
