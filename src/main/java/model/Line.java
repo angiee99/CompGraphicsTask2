@@ -53,12 +53,6 @@ public class Line {
         return interc.x;
     }
 
-    public double xIntercept(double x){
-        if(y1 == y2) return y1;
-        double k = Math.abs((double)(y2 - y1) / (double)(x2 - x1));
-        double q = y1 - k*x1;
-        return k*x1 + q;
-    }
 
     public Point lineIntercept(Line other){
         //if both verticall
@@ -74,7 +68,7 @@ public class Line {
         // normal case
         int x3 = other.x1; int y3 = other.y1;
         int x4 = other.x2; int y4 = other.y2;
-        //if divisor = 0? or inf?
+
         double divisor = (double) ((x1-x2)*(y3 - y4)) - (double) ((y1-y2)*(x3-x4));
 
         double x0UpperValue = (double)(x1*y2 - x2*y1) * (double)(x3 - x4) -

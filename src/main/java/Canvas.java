@@ -33,7 +33,7 @@ public class Canvas {
     private JFrame frame;
     private JPanel panel;
     private RasterBI img;
-    private Point anchorPoint, rectangleAnchorPoint;
+    private Point anchorPoint, rectangleAnchorPoint, polAnchorPoint;
     private LinerDDAII liner;
     private LinerDashed dashedLiner;
     private PolygonerBasic polygoner;
@@ -165,20 +165,35 @@ public class Canvas {
         panel.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-            Runnable mouseDragChange = () -> {
-                if (anchorPoint.x == -1 && anchorPoint.y == -1) {
-                    anchorPoint.x = e.getX();
-                    anchorPoint.y = e.getY();
-                } else if (anchorPoint.x != -1 && anchorPoint.y != -1) {
-                    if (withShift) {
-                        predrawStrictLine(anchorPoint, new Point(e.getX(), e.getY()));
-                    } else {
-                        predrawLine(anchorPoint, new Point(e.getX(), e.getY()));
-                    }
+                Runnable mouseDragChange;
+                // interactive editting of polygon: preview of adding new vertex
+                if(e.isAltDown()){
+                    mouseDragChange = () -> {
+                        if(polAnchorPoint.x != -1 && polAnchorPoint.y != -1){
+                            mainPolygon.removeVertex(polAnchorPoint);
+                        }
+                        polAnchorPoint.x = e.getX();
+                        polAnchorPoint.y = e.getY();
+                        mainPolygon.addVertex(polAnchorPoint);
+                    };
                 }
-            };
-            change(mouseDragChange);
-            }
+                else {
+                    // mouse dragging to preview a line
+                    mouseDragChange = () -> {
+                        if (anchorPoint.x == -1 && anchorPoint.y == -1) {
+                            anchorPoint.x = e.getX();
+                            anchorPoint.y = e.getY();
+                        } else if (anchorPoint.x != -1 && anchorPoint.y != -1) {
+                            if (withShift) {
+                                predrawStrictLine(anchorPoint, new Point(e.getX(), e.getY()));
+                            } else {
+                                predrawLine(anchorPoint, new Point(e.getX(), e.getY()));
+                            }
+                        }
+                    };
+                }
+                change(mouseDragChange);
+                }
         });
 
         panel.addMouseListener(new MouseAdapter() {
@@ -211,7 +226,7 @@ public class Canvas {
                             }
 
                             change(addRect);
-                            resetAnchorPoint();
+                            resetRectAnchorPoint();
                         }
 
                     }
@@ -222,6 +237,7 @@ public class Canvas {
 
                 }
                 if(e.getButton() == MouseEvent.BUTTON3){
+                    // add vertex to last drawn rectangle
                     if (e.isShiftDown()) {
                         if(rectangles.size()>0){
                             Runnable addVRect = ()-> {
@@ -258,18 +274,37 @@ public class Canvas {
             // saves the line
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (anchorPoint.x != -1 && anchorPoint.y != -1) {
-                    Line current;
-                    if (withShift) {
-                        current = new LinerStrict()
-                                .getStrictLine(anchorPoint, new Point(e.getX(), e.getY()), red.getRGB());
-                    } else {
-                        current = new Line(anchorPoint, new Point(e.getX(), e.getY()), red.getRGB());
-                    }
-                    Runnable newLine = () -> { lineList.add(current); };
-                    change(newLine);
-                    resetAnchorPoint();
+                // interactive editting of polygon: adding new vertex
+                if(e.isAltDown() && e.getButton() == MouseEvent.BUTTON1){
+                    Runnable addDraggedVertex = () -> {
+                        mainPolygon.removeVertex(polAnchorPoint);
+                        int x = e.getX();
+                        int y = e.getY();
+                        if(x <= img.getWidth() && x >= 0
+                            && y <= img.getHeight() && y >= 0){
+                            mainPolygon.addVertex(new Point(e.getX(), e.getY()));
+                        }
+
+                        resetPolAnchorPoint();
+                    };
+                    change(addDraggedVertex);
                 }
+
+                else{
+                    if (anchorPoint.x != -1 && anchorPoint.y != -1) {
+                        Line current;
+                        if (withShift) {
+                            current = new LinerStrict()
+                                    .getStrictLine(anchorPoint, new Point(e.getX(), e.getY()), red.getRGB());
+                        } else {
+                            current = new Line(anchorPoint, new Point(e.getX(), e.getY()), red.getRGB());
+                        }
+                        Runnable newLine = () -> { lineList.add(current); };
+                        change(newLine);
+                        resetAnchorPoint();
+                    }
+                }
+
             }
         });
     }
@@ -284,6 +319,7 @@ public class Canvas {
         ellipses = new ArrayList<>();
 
         rectangleAnchorPoint = new Point(-1, -1);
+        polAnchorPoint = new Point(-1, -1);
         anchorPoint = new Point(-1, -1);
 
         withShift = false;
@@ -303,6 +339,8 @@ public class Canvas {
     public void clearCanvas() {
         clear();
         resetAnchorPoint();
+        resetRectAnchorPoint();
+        resetPolAnchorPoint();
 
         lineList.clear();
         previewLine.clear();
@@ -381,9 +419,16 @@ public class Canvas {
         anchorPoint.x = -1;
         anchorPoint.y = -1;
 
+    }
+    private void resetRectAnchorPoint(){
         rectangleAnchorPoint.x = -1;
         rectangleAnchorPoint.y = -1;
     }
+    private void resetPolAnchorPoint(){
+        polAnchorPoint.x = -1;
+        polAnchorPoint.y = -1;
+    }
+
     /**
      * Resets the step that is dashed liner
      */

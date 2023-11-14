@@ -14,7 +14,9 @@ that enables filling the polygons and cropping objects.
 - Fill the polygon with SeedFill by clicking on right mouse button 
 (if with Alt/Option key pressed, it will use the border condition, 
 else will evaluate only based on background color)
-- Fill the main polygon with ScanLine by pressing F key 
+- Fill the main polygon with ScanLine by pressing F key clicking on right mouse button
+and pressing Control key
+- Fill the main polygon with pattern with SeedFill by 
 - Draw the rectangle by pressing Control key and mouse clicking on 2 points 
 (these points can be upper left and lower right)
 - Draw the ellipse limited by rectangle by pressing Control key and Shift key and 
