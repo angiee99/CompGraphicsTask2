@@ -1,6 +1,6 @@
 package model;
 
-public class Ellipse extends Polygon{
+public class Ellipse{
     private Point center;
     private int Rx, Ry;
     public Ellipse(){

@@ -29,7 +29,7 @@ public class SeedFill4 implements SeedFill {
         fill(img, c, r+1, fillColor, isInArea);
         fill(img, c, r-1, fillColor, isInArea);
     }
-    public void fillPattern(Raster img, int c, int r, Color fillColor, Predicate<Integer> isInArea) {
+    public void fillPattern(Raster img, int c, int r, Predicate<Integer> isInArea) {
 
         if( img.getColor(c, r).isEmpty())
             return;
@@ -44,9 +44,9 @@ public class SeedFill4 implements SeedFill {
         img.setColor( pattern.paint(c, r), c, r);
 
         // recursion
-        fillPattern(img, c + 1, r, fillColor, isInArea);
-        fillPattern(img, c - 1, r, fillColor, isInArea);
-        fillPattern(img, c, r+1, fillColor, isInArea);
-        fillPattern(img, c, r-1, fillColor, isInArea);
+        fillPattern(img, c + 1, r, isInArea);
+        fillPattern(img, c - 1, r, isInArea);
+        fillPattern(img, c, r+1, isInArea);
+        fillPattern(img, c, r-1, isInArea);
     }
 }

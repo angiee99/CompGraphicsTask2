@@ -49,7 +49,7 @@ public class ScanLine {
             //sort
             mergeSort(intercepts);
 
-            // fill between even and odd intercepts -> works weird
+            // fill between even and odd intercepts
             for (int l = 0; l < intercepts.size()-1; l+=2) {
                 Point p1 = intercepts.get(l);
                 Point p2 = intercepts.get(l+1);
@@ -58,7 +58,7 @@ public class ScanLine {
         }
 
     }
-    public void mergeSort(List<Point> points) {
+    public void mergeSort (List < Point > points) {
         if (points.size() <= 1) {
             return; // Already sorted
         }
@@ -73,7 +73,7 @@ public class ScanLine {
         merge(points, left, right);
     }
 
-    private  void merge(List<Point> points, ArrayList<Point> left, ArrayList<Point> right) {
+    private void merge (List < Point > points, ArrayList < Point > left, ArrayList < Point > right){
         int i = 0, j = 0, k = 0;
 
         while (i < left.size() && j < right.size()) {
@@ -92,4 +92,6 @@ public class ScanLine {
             points.set(k++, right.get(j++));
         }
     }
+
 }
+

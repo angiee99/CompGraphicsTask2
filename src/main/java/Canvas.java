@@ -167,7 +167,7 @@ public class Canvas {
             public void mouseDragged(MouseEvent e) {
                 Runnable mouseDragChange;
                 // interactive editting of polygon: preview of adding new vertex
-                if(e.isAltDown()){
+                if(e.isAltDown() && e.getButton() == MouseEvent.BUTTON1){
                     mouseDragChange = () -> {
                         if(polAnchorPoint.x != -1 && polAnchorPoint.y != -1){
                             mainPolygon.removeVertex(polAnchorPoint);
@@ -260,7 +260,7 @@ public class Canvas {
                         }
 
                         if(e.isControlDown()){
-                            new SeedFill4().fillPattern(img, e.getX(), e.getY(), yellow, predicate);
+                            new SeedFill4().fillPattern(img, e.getX(), e.getY(), predicate);
                         }
                         else {
                             new SeedFill4().fill(img, e.getX(), e.getY(), yellow, predicate);

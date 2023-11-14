@@ -5,7 +5,7 @@ import model.Point;
 import model.Polygon;
 import rasterization.Raster;
 
-public class Ellipser implements Polygoner{
+public class Ellipser {
     private Raster raster;
     private int color;
 
@@ -14,10 +14,6 @@ public class Ellipser implements Polygoner{
         this.color = color;
     }
 
-    @Override
-    public void drawPolygon(Polygon polygon) {
-        drawEllipse((Ellipse)polygon);
-    }
 
     public void drawEllipse(Ellipse ellipse){
         float dx, dy, d1, d2;
