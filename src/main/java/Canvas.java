@@ -289,6 +289,7 @@ public class Canvas {
                 }
 
                 else{
+                    mainPolygon.removeVertex(polAnchorPoint);
                     if (anchorPoint.x != -1 && anchorPoint.y != -1) {
                         Line current;
                         if (withShift) {
