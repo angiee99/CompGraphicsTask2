@@ -12,7 +12,7 @@ public class Polygon {
         vertices = new ArrayList<Point>();
     }
     public Polygon(ArrayList<Point> vertices){
-        this.vertices = new ArrayList<>(vertices); // is it ok?
+        this.vertices = new ArrayList<>(vertices);
     }
 
     public ArrayList<Point> getVertices(){
@@ -61,51 +61,6 @@ public class Polygon {
         }
         return closestEdge;
     }
-
-//    /**
-//     * Calculates the distance between point and edge formed by p1 and p2
-//     * @param point
-//     * @param p1
-//     * @param p2
-//     * @return
-//     */
-//    private double distanceTo(Point point, Point p1, Point p2) {
-//        double x1 = p1.x;
-//        double y1 = p1.y;
-//        double x2 = p2.x;
-//        double y2 = p2.y;
-//        double x = point.x;
-//        double y = point.y;
-//
-//        double A = x - x1;
-//        double B = y - y1;
-//        double C = x2 - x1;
-//        double D = y2 - y1;
-//
-//        double dot = A * C + B * D;
-//        double len_sq = C * C + D * D;
-//        double param = -1;
-//
-//        if (len_sq != 0) // zero length line
-//            param = dot / len_sq;
-//
-//        double xx, yy;
-//
-//        if (param < 0) {
-//            xx = x1;
-//            yy = y1;
-//        } else if (param > 1) {
-//            xx = x2;
-//            yy = y2;
-//        } else {
-//            xx = x1 + param * C;
-//            yy = y1 + param * D;
-//        }
-//
-//        double dx = x - xx;
-//        double dy = y - yy;
-//        return Math.sqrt(dx * dx + dy * dy);
-//    }
 
     /**
      * Adds new vertex at the given index
@@ -174,6 +129,10 @@ public class Polygon {
         vertices.clear();
     }
 
+    /**
+     * Constructs and returns a list of polygon edges
+     * @return list of polygon edges
+     */
     public List<Line> getEdges(){
         List<Line> edges = new ArrayList<>();
         for (int i = 0; i < getVertexCount() - 1; i++) {

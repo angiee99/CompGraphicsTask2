@@ -11,6 +11,12 @@ import java.util.List;
  * Represents the Shuterland-Hodgman algorithm for polygon cutter
  */
 public class PolygonCutter {
+    /**
+     * Cuts the polygon
+     * @param cutiingPolygon
+     * @param polygonToCut
+     * @return polygon aften cutting
+     */
     public Polygon cut(Polygon cutiingPolygon, Polygon polygonToCut){
         List<Line> clippingEdges = cutiingPolygon.getEdges();
         ArrayList<Point> in = polygonToCut.getVertices();
@@ -26,7 +32,7 @@ public class PolygonCutter {
                     if(!edge.isInside(v1)){
                         Point intercept = edge.lineIntercept(new Line(v1,v2));
                         if(intercept.x!= -1 && intercept.y!=-1){
-                            out.add(intercept); //var.4
+                            out.add(intercept);
                         }
                     }
                     out.add(v2);
@@ -35,7 +41,7 @@ public class PolygonCutter {
                     if(edge.isInside(v1)){
                         Point intercept = edge.lineIntercept(new Line(v1,v2));
                          if(intercept.x!= -1 && intercept.y!=-1){
-                            out.add(intercept); //var.2
+                            out.add(intercept);
                         }
                     }
                 }

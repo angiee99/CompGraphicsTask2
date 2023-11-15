@@ -9,7 +9,16 @@ import rasterops.rasterize.LinerDDAII;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implements ScanLine algorithm for filling polygon
+ */
 public class ScanLine {
+    /**
+     * fills a polygon with ScanLine
+     * @param raster
+     * @param polygon
+     * @param fillColor
+     */
     public void fill(Raster raster, Polygon polygon, int fillColor){
         List<Line> edges = polygon.getEdges();
         //remove horizontal line
@@ -18,14 +27,14 @@ public class ScanLine {
                 edges.remove(i);
             }
         }
-        // orient the lines +works
+        // orient the lines
         for (int i = 0; i < edges.size(); i++) {
             edges.set(i, edges.get(i).oriental());
         }
 
-        // yMin and yMax (of Polygon)  +works
-        int yMin = 100000;
-        int yMax = -100000;
+        // yMin and yMax (of Polygon)
+        int yMin = Integer.MAX_VALUE;
+        int yMax = Integer.MIN_VALUE;
 
         for (int i = 0; i < polygon.getVertexCount(); i++) {
             Point curr = polygon.getVertex(i);

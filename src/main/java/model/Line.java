@@ -32,10 +32,17 @@ public class Line {
         this.color = 0;
     }
 
+    /**
+     *
+     * @return true if line is horizontal
+     */
     public boolean isHorizontal(){
         return y1 == y2;
     }
-
+    /**
+     * orients the line so that the endPoint.y coordinate is less than startPoint.y
+     * @return oreinted line
+     */
     public Line oriental(){
         if(y2 > y1){
             return this;
@@ -43,17 +50,31 @@ public class Line {
         else return new Line(x2, y2, x1, y1, color);
     }
 
+    /**
+     *
+     * @param y
+     * @return true if line has an intercept with y
+     */
     public boolean hasYIntercept(double y){
         return (isInRange((int)Math.round(y), y1, y2-1));
     }
 
+    /**
+     *
+     * @param y
+     * @return x coordinate of intercept between line and y
+     */
     public double yIntercept(double y){
         if(x1 == x2) return x1;
         Point interc = lineIntercept(new Line(new Point(0, Math.round(y)), new Point(600, Math.round(y))));
         return interc.x;
     }
 
-
+    /**
+     * Counts the intercept between two lines
+     * @param other other line
+     * @return Point of two line intercept, if does not exist returns Point(-1; -1)
+     */
     public Point lineIntercept(Line other){
         //if both verticall
         if(x1 == x2 && other.x1 == other.x2 ) {
@@ -82,6 +103,14 @@ public class Line {
 
         return new Point(x0, y0);
     }
+
+    /**
+     * Determines if a is in range from a to be (both included)
+     * @param x
+     * @param a
+     * @param b
+     * @return
+     */
     public boolean isInRange(int x, int a, int b){
         int min = Math.min(a, b);
         int max = Math.max(a, b);
@@ -89,9 +118,14 @@ public class Line {
         return (x >= min && x <= max);
     }
 
+    /**
+     * Determines uf a point lies inside or outside the half plane
+     * @param p
+     * @return true if point lies inside
+     */
     public boolean isInside(Point p){
         final Point t = new Point(x2  - x1, y2 - y1);
-        final Point n = new Point(t.y, -t.x); // if not the wanted side then change to (-t.y, t.x);
+        final Point n = new Point(t.y, -t.x);
         final Point v = new Point(p.x - x1, p.y - y1);
 
         final double cosAlpha = (double)n.x * v.x + (double)n.y * v.y;

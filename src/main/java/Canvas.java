@@ -67,8 +67,6 @@ public class Canvas {
         dashedLiner = new LinerDashed();
         polygoner = new PolygonerBasic(img, green.getRGB());
 
-
-
         panel = new JPanel() {
             private static final long serialVersionUID = 1L;
 
@@ -166,7 +164,7 @@ public class Canvas {
             @Override
             public void mouseDragged(MouseEvent e) {
                 Runnable mouseDragChange;
-                // interactive editting of polygon: preview of adding new vertex
+                // interactive editing of polygon: preview of adding new vertex
                 if(e.isAltDown() && e.getButton() == MouseEvent.BUTTON1){
                     mouseDragChange = () -> {
                         if(polAnchorPoint.x != -1 && polAnchorPoint.y != -1){
@@ -309,6 +307,9 @@ public class Canvas {
         });
     }
 
+    /**
+     * initiates variables for string objects, colors, anchor points
+     */
     private void setupCanvas(){
         lineList = new ArrayList<Line>();
         previewLine = new ArrayList<Line>();
@@ -420,10 +421,16 @@ public class Canvas {
         anchorPoint.y = -1;
 
     }
+    /**
+     * Resets the anchor point that is used in rectangle drawing
+     */
     private void resetRectAnchorPoint(){
         rectangleAnchorPoint.x = -1;
         rectangleAnchorPoint.y = -1;
     }
+    /**
+     * Resets the anchor point that is used in mouse drag for adding polygon vertex
+     */
     private void resetPolAnchorPoint(){
         polAnchorPoint.x = -1;
         polAnchorPoint.y = -1;

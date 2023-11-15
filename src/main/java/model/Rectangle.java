@@ -1,10 +1,8 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Rectangle extends Polygon{
-//    private ArrayList<Point> vertices;
     public Rectangle(){
         vertices = new ArrayList<>();
     }
@@ -23,15 +21,27 @@ public class Rectangle extends Polygon{
         vertices.add(upperRight);
     }
 
-
+    /**
+     * Counts the center of polygon, which is also the interception of diagonals
+     * @return the center point
+     */
     public Point countCenter() {
-        int xCenter = Math.min(vertices.get(0).x, vertices.get(3).x) + getWidth()/2;
-        int yCenter = Math.min(vertices.get(0).y, vertices.get(1).y) + getHeight()/2;
+        int xCenter = Math.min(vertices.get(0).x, vertices.get(3).x) + getWidth() / 2;
+        int yCenter = Math.min(vertices.get(0).y, vertices.get(1).y) + getHeight() / 2;
         return new Point(xCenter, yCenter);
     }
+
+    /**
+     *
+     * @return rectangle's width
+     */
     public int getWidth(){
         return Math.abs(vertices.get(0).x - vertices.get(3).x);
     }
+    /**
+     *
+     * @return rectangle's height
+     */
     public int getHeight(){
         return Math.abs(vertices.get(0).y - vertices.get(1).y);
     }

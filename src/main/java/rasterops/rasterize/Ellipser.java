@@ -1,10 +1,11 @@
 package rasterops.rasterize;
 
 import model.Ellipse;
-import model.Point;
-import model.Polygon;
 import rasterization.Raster;
 
+/**
+ * implementation for rasterising an ellipse
+ */
 public class Ellipser {
     private Raster raster;
     private int color;
@@ -19,15 +20,16 @@ public class Ellipser {
         float dx, dy, d1, d2;
         int xc, yc, rx, ry, x, y;
 
-        xc= ellipse.getCenter().x;
+        xc = ellipse.getCenter().x;
         yc = ellipse.getCenter().y;
         rx = ellipse.getRx();
         ry = ellipse.getRy();
 
+        // initializing x, y
         x = 0;
         y = ry;
 
-        // Initial decision parameter of  1st half quadrant
+        // Initial decision parameter of 1st half quadrant
         d1 = (ry * ry) - (rx * rx * ry) + (0.25f * rx * rx);
         dx = 2 * ry * ry * x;
         dy = 2 * rx * rx * y;
@@ -79,7 +81,15 @@ public class Ellipser {
         }
     }
 
-    //private void SetSymmetric(Raster raster, int color, Point xy, Point center)
+    /**
+     * Based on one point colors also symmetric points
+     * @param raster
+     * @param color
+     * @param x givenPoint.x
+     * @param xc centralPoint.x
+     * @param y givenPoint.y
+     * @param yc centralPoint.y
+     */
     private void setSymmetric(Raster raster, int color, int x, int xc, int y, int yc){
         raster.setColor(color, x+xc, y + yc);
         raster.setColor(color, x + xc,  yc - y);

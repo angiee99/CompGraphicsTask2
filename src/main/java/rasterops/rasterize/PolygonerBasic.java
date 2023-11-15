@@ -5,8 +5,6 @@ import model.Polygon;
 import model.Rectangle;
 import rasterization.Raster;
 
-import java.util.Optional;
-
 /**
  * Polygoner implementation for drawing polygon, adding new vertices and deleting existent
  */
